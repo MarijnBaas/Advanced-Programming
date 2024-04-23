@@ -3,7 +3,24 @@ The goal of the assignment is by applying the least amount of inversions necessa
 the target DNA. This can be done by the following components:
 
 1. Looking for inverted areas
-2. Inverting parts of a DNA sequence
-3. Finding the fastest way to fix the inverted areas
+2. Finding the fastest way to fix the inverted areas
+3. Output fastest path to fix inverted areas
 
-The fastest way to check for inversions is by comparing the source and target DNA strand.
+The fastest way to check for inversions is by comparing the source and target DNA strand and then
+classifying them depending on certain characteristics.
+1. Inverts are only local so for example 132457689 / Inverts are global 18743569
+2. Inverts are simple or nested
+
+
+The next step is solving them by fixing local/global inverts first and then solving the simple/nested inverts.
+
+
+System that checks the fastest way to fix a invert so for example 32187659 sees a wrong number at 3 1 8 7 6 5 
+The program then checks the fastest way to solve the issue for each index so for example for 3 it would be inverting 
+part between 3 and the 2nd index. The same happens for 1 8 7 6 5. If it detects no overlap between the instances except
+for the same solution it excecutes it. So for 32187659 3 and 1 both give a invertation of the indeces [0, 1, 2] and 
+the other indeces dont overlap so it is excecuted and the new sequence is 12387659.
+
+In instances where the plans overlap both are excecuted seperately and then checked for the resulting amount of steps.
+The one with the least steps is the preferred and printed as the optimal solution.
+
