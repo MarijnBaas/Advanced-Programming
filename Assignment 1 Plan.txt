@@ -6,4 +6,4 @@ the target DNA. This can be done by the following components:
 2. Inverting parts of a DNA sequence
 3. Finding the fastest way to fix the inverted areas
 
-
+The fastest way to check for inversions is by comparing the source and target DNA strand.
