@@ -24,3 +24,13 @@ the other indeces dont overlap so it is excecuted and the new sequence is 123876
 In instances where the plans overlap both are excecuted seperately and then checked for the resulting amount of steps.
 The one with the least steps is the preferred and printed as the optimal solution.
 
+
+Step 1: Identifying where the inverts are by checking source against target --> Step 2
+Step 2: Checking for the fastest way to solve individual inverts --> Step 3
+Step 3: Combining into dictionary with value amount of times invert is requested --> tTep 4
+Step 4: Checking for Overlap of inverts --> Step 5
+Step 5: No Overlap --> Step 9 or Overlap Step 6
+Step 6: Subset --> Step 7 or No Subset --> Step 8
+Step 7: Combine inverts --> Step 9
+Step 8: Run Both Options --> Step 9
+Step 9: Invert sequence
