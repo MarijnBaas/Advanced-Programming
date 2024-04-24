@@ -1,5 +1,6 @@
-source = '3 2 1 4 8 7 6 5 9'
+#source = '3 2 1 4 8 7 6 5 9'
 #source = '3 2 1 8 4 7 6 5 9'
+source = '1 2 5 4 3 6 7 8 9'
 target = '1 2 3 4 5 6 7 8 9'
 
 source_list = source.split()
@@ -54,15 +55,33 @@ def check_overlapping_keys(dictionary):
 
 overlapping_list = check_overlapping_keys(inv_dict)
 
-def invert_sequence(source, inversion_key):
-    for i in range(len(inversion_key)):
-        print(inversion_key[-i+len(inversion_key)-1])
-        
+# def invert_sequence(source_list, inversion_key):
+#     updated_source = source_list
+#     for i in range(len(inversion_key)):
+#         #inverse = inversion_key[-i+len(inversion_key)-1]
+#         new_number = source_list[len(inversion_key)-i-1]
+#         updated_source[i] = new_number
+
+#     print(updated_source)
+# def invert_sequence(source_list, inversion_key): 
+#     start_index = min(inversion_key)  
+#     end_index = max(inversion_key)
+#     inverted_sublist = source_list[start_index:end_index][::-1]
+#     source_list = inverted_sublist + source_list[end_index:]
+#     print(source_list)
+
+def invert_sequence(source_list, inversion_key): 
+    start_index = min(inversion_key)  
+    end_index = max(inversion_key) + 1  # Adjust end index to include the last element
+    inverted_sublist = source_list[start_index:end_index][::-1]
+    source_list[start_index:end_index] = inverted_sublist
+    print(source_list)
+    return source_list
+
 for i in range(len(overlapping_list)):
     if not overlapping_list[i]:
         inversion_key = list(inv_dict.keys())[i]
-        invert_sequence(source, inversion_key)
+        source_list = invert_sequence(source_list, inversion_key)
         print('yes')
     else:
         print('no')
-        
