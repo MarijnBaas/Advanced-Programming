@@ -34,7 +34,7 @@ def combine_overlapping_keys(dictionary):
     new_dict = dictionary.copy()
     for i in range(len(key_list)):  
         for j in range(len(key_list)):  
-            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])):
+            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])) and new_dict[key_list[i]] > 1:
                 del new_dict[key_list[j]]
     return new_dict
 #--------------------------------------------------------------------------------------------------------
@@ -66,33 +66,28 @@ def invert_sequence(source_list, inversion_key):
     print(source_list)
     return source_list
 #--------------------------------------------------------------------------------------------------------
-source_list = [1, 2, 6, 5, 4, 3, 7, 8, 9]
+source_list = [1, 2, 3, 4, 5, 9, 6, 8, 7]
 target_list =[1,2,3,4,5,6,7,8,9]
-source = '1 2 6 5 4 3 7 8 9'
+source = '1 2 3 4 5 9 6 8 7'
 
-# def inversion_loop(source_list, target_list, source):
-#     mutation = mutation_finder(source_list, target_list)
-#     inversion_list = fastest_invert(mutation, source)
-#     inv_dict = inversion_dict(inversion_list)
-#     new_dict = combine_overlapping_keys(inv_dict)
-#     non_overlapping, overlapping = check_overlaps(new_dict)
-#     return non_overlapping, overlapping
+def inversion_loop(source_list, target_list, source):
+    mutation = mutation_finder(source_list, target_list)
+    inversion_list = fastest_invert(mutation, source)
+    inv_dict = inversion_dict(inversion_list)
+    new_dict = combine_overlapping_keys(inv_dict)
+    non_overlapping, overlapping = check_overlaps(new_dict)
+    return non_overlapping, overlapping
 
-# non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
+non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
 
-def inversion_mutations(source_list, target_list):
+def inversion_mutations(source_list, target_list, source):
     print(source_list)
-    mutation =[0]
-    while len(mutation) != 0:
-        mutation = mutation_finder(source_list, target_list)
-        inversion_list = fastest_invert(mutation, source)
-        inv_dict = inversion_dict(inversion_list)
-        new_dict = combine_overlapping_keys(inv_dict)
-        non_overlapping, overlapping = check_overlaps(new_dict)
+    non_overlapping, overlapping =[0], [0]
+    while len(non_overlapping)!= 0 or len(overlapping) != 0:
+        non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
         for i in range(len(non_overlapping)):
-            invert_sequence(source_list, non_overlapping[i])
+            invert_sequence(source_list, non_overlapping[i])        
+        longest_overlapping = max(overlapping, key=len)
+        invert_sequence(source_list, longest_overlapping)
 
-inversion_mutations(source_list, target_list)
-#plan is to put a part of inversion mutation into a combined function and than calling that again on a
-#sublist of the new sequences made by the overlapping mutation sequences.
-
+inversion_mutations(source_list, target_list, source)
