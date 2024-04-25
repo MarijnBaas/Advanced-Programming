@@ -42,8 +42,8 @@ def combine_overlapping_keys(dictionary):
     class_list = []
     new_dict = dictionary.copy()
     for i in range(len(key_list)):  
-        for j in range(len(key_list)):  
-            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])) and new_dict[key_list[i]] > 1:
+        for j in range(len(key_list)):
+            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])) and dictionary[key_list[i]] > 1:
                 del new_dict[key_list[j]]
     return new_dict
 #--------------------------------------------------------------------------------------------------------
@@ -67,12 +67,14 @@ def check_overlaps(new_dict):
             overlapping.append(key_list[i])
     return non_overlapping, overlapping
 #--------------------------------------------------------------------------------------------------------
-def invert_sequence(source_list, inversion_key, number): 
+def invert_sequence(source_list, inversion_key, number, mutation_order): 
     start_index = min(inversion_key)  
     end_index = max(inversion_key) + 1  
     inverted_sublist = source_list[start_index:end_index][::-1]
     source_list[start_index:end_index] = inverted_sublist
-    print(source_list)
+    #print(source_list)
+    source_list_text = ' '.join(map(str, source_list)) 
+    mutation_order.append(source_list_text)
     number = number+1
     return source_list, number
 #--------------------------------------------------------------------------------------------------------
@@ -90,24 +92,32 @@ def inversion_loop(source_list, target_list, source):
 
 #non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
 
-def inversion_mutations(file_name):
+def inversion_mutations(file_name, new_file_name):
     N, sequences = read_file(file_name)
+    new_file = open(new_file_name, "w")
     for j in range(N):
+        mutation_order = []
         source_list = sequences[j]
         target_list = sorted(source_list)
         source = ' '.join(map(str, source_list))
-        print(source_list)
         number = 0
         non_overlapping, overlapping =[0], [0]
         while len(non_overlapping)!= 0 or len(overlapping) != 0:
             non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
             for i in range(len(non_overlapping)):
-                source_list, number = invert_sequence(source_list, non_overlapping[i], number) 
+                source_list, number = invert_sequence(source_list, non_overlapping[i], number, mutation_order) 
             if len(overlapping) != 0:       
                 longest_overlapping = max(overlapping, key=len)
-                source_list, number = invert_sequence(source_list, longest_overlapping, number)
-        print(number)
+                source_list, number = invert_sequence(source_list, longest_overlapping, number, mutation_order)
+        new_file.write(str(number))
+        new_file.write('\n')
+        new_file.write(source)
+        new_file.write('\n')
+        for k in range(len(mutation_order)):
+            new_file.write(mutation_order[k])
+            new_file.write('\n')
+    new_file.close()
 
 #horror sequence = 7 6 1 9 8 2 10 5 3 4
 
-inversion_mutations('sample_sequence_set2.txt')
+inversion_mutations('sample_sequence_set2.txt', 'solved_sample_sequence_set2.txt')
