@@ -68,7 +68,6 @@ def invert_sequence(source_list, inversion_key, number, mutation_order):
     end_index = max(inversion_key) + 1  
     inverted_sublist = source_list[start_index:end_index][::-1]
     source_list[start_index:end_index] = inverted_sublist
-    #print(source_list)
     source_list_text = ' '.join(map(str, source_list)) 
     mutation_order.append(source_list_text)
     number = number+1
