@@ -82,7 +82,7 @@ def invert_sequence(source_list, inversion_key, number, mutation_order):
 # target_list =[1,2,3,4,5,6,7,8,9]
 # source = '1 2 3 4 5 9 6 8 7'
 
-def inversion_loop(source_list, target_list, source):
+def inversion_loop(source_list, target_list):
     mutation = mutation_finder(source_list, target_list)
     inversion_list = fastest_invert(mutation, source_list)
     inv_dict = inversion_dict(inversion_list)
@@ -103,7 +103,7 @@ def inversion_mutations(file_name, new_file_name):
         number = 0
         non_overlapping, overlapping =[0], [0]
         while len(non_overlapping)!= 0 or len(overlapping) != 0:
-            non_overlapping, overlapping = inversion_loop(source_list, target_list, source)
+            non_overlapping, overlapping = inversion_loop(source_list, target_list )
             for i in range(len(non_overlapping)):
                 source_list, number = invert_sequence(source_list, non_overlapping[i], number, mutation_order) 
             if len(overlapping) != 0:       
