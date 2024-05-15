@@ -80,27 +80,27 @@ def inversion_dict(inversion_list):
             inv_dict[sublist_tuple] = 1
     return inv_dict
 #-------------------------------------------------------------------------------------------------------
-def combine_overlapping_keys(dictionary):
+def combine_overlapping_keys(possible_inversions):
     """
     Combines keys that are a subset of a larger key so [2,3,4,5] and [3,4] would be combined
  
     Args:
-        dictionary = Dictionary with all keys of possible inversions
+        possible_inversions = Dictionary with all keys of possible inversions
  
     Returns:
-        new_dict = new dictionary with combined keys if they are overlapping
+        combined_inversions = new dictionary with combined keys if they are overlapping
 
     """
-    key_list = list(dictionary.keys())
-    class_list = []
-    new_dict = dictionary.copy()
+    key_list = list(possible_inversions.keys())
+    #class_list = []
+    combined_inversions = possible_inversions.copy()
     for i in range(len(key_list)):  
         for j in range(len(key_list)):
-            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])) and dictionary[key_list[i]] > 1:
-                del new_dict[key_list[j]]
-    return new_dict
+            if i != j and len(set(key_list[i]).intersection(set(key_list[j]))) == len(set(key_list[j])) and possible_inversions[key_list[i]] > 1:
+                del combined_inversions[key_list[j]]
+    return combined_inversions
 #--------------------------------------------------------------------------------------------------------
-def check_overlaps(new_dict):
+def check_overlaps(combined_inversions):
     """
     Takes the new_dict and splits them up into lists of overlapping and non overlapping inversion requests.
  
@@ -112,7 +112,7 @@ def check_overlaps(new_dict):
         non_overlapping = list of all inversion requests that do not overlap
 
     """
-    key_list = list(new_dict.keys())
+    key_list = list(combined_inversions.keys())
     overlapping_list = []
     non_overlapping = []
     overlapping = []
@@ -129,14 +129,14 @@ def check_overlaps(new_dict):
             overlapping.append(key_list[i])
     return non_overlapping, overlapping
 #--------------------------------------------------------------------------------------------------------
-def invert_sequence(source_list, inversion_key, number, mutation_order): 
+def invert_sequence(source_list, inversion_key, inversion_count, mutation_order): 
     """
     Inverts the sequence depending on what inversion_key is given as input 
  
     Args:
         source_list = list on which you want to invert
         inversion_key = list of indeces you want to invert
-        number = total amount of inversions done
+        inversion_count = total amount of inversions done
         mutation_order = list with sublists which you append the new source_list to
  
     Returns:
@@ -150,8 +150,8 @@ def invert_sequence(source_list, inversion_key, number, mutation_order):
     source_list[start_index:end_index] = inverted_sublist
     source_list_text = ' '.join(map(str, source_list)) 
     mutation_order.append(source_list_text)
-    number = number+1
-    return source_list, number
+    inversion_count = inversion_count+1
+    return source_list, inversion_count
 #--------------------------------------------------------------------------------------------------------
 def inversion_loop(source_list, target_list):
     """
@@ -168,9 +168,9 @@ def inversion_loop(source_list, target_list):
     """
     mutation = mutation_finder(source_list, target_list)
     inversion_list = fastest_invert(mutation, source_list)
-    inv_dict = inversion_dict(inversion_list)
-    new_dict = combine_overlapping_keys(inv_dict)
-    non_overlapping, overlapping = check_overlaps(new_dict)
+    possible_inversions = inversion_dict(inversion_list)
+    combined_inversions = combine_overlapping_keys(possible_inversions)
+    non_overlapping, overlapping = check_overlaps(combined_inversions)
     return non_overlapping, overlapping
 #--------------------------------------------------------------------------------------------------------
 def inversion_mutations(file_name, new_file_name):
@@ -199,7 +199,8 @@ def inversion_mutations(file_name, new_file_name):
             if len(overlapping) != 0:       
                 longest_overlapping = max(overlapping, key=len)
                 source_list, number = invert_sequence(source_list, longest_overlapping, number, mutation_order)
-                #Can be rewritten to recursion to find the minimal invert sequence
+                #Can be rewritten to recursion to find the minimal invert sequence it should run all overlapping
+                #inversion possibilities and make them into lists with sublists
         new_file.write(str(number))
         new_file.write('\n')
         new_file.write(source)
