@@ -162,20 +162,30 @@ def minimal_inversions(source_list, target_list):
         mutation_order = list of all the steps (inversions) taken to reach target_list
         num_inversions = total number of inversions performed
     """
+    #make a tuple containing the current list the order of mutations and the amount of inversions done
     queue = deque([(source_list, [], 0)]) 
+
+    #List of processed mutations to not do duplicates
     visited = set()
     visited.add(tuple(source_list))
+
     while queue:
+        #Get the first element in the queue
         current_list, mutation_order, inversion_count = queue.popleft()
+        #Check if there is mutations left
         if current_list == target_list:
             return mutation_order, inversion_count
+        #Find the mutations
         mutation = mutation_finder(current_list, target_list)
-        if not mutation:
-            return mutation_order, inversion_count
+        #Generate the list of possible moves
         inversion_list = fastest_invert(mutation, current_list)
+        #Make a dictionary with the amount of times a move a requested
         possible_inversions = inversion_dict(inversion_list)
+        #Combine the moves if they are overlapping
         combined_inversions = combine_overlapping_keys(possible_inversions)
+        #Split them into non_overlapping and overlapping moves
         non_overlapping, overlapping = check_overlaps(combined_inversions)
+        #Execute all possibilties
         for inv_key in non_overlapping + overlapping:
             new_list = current_list.copy()
             new_list = invert_sequence(new_list, inv_key)
@@ -183,7 +193,8 @@ def minimal_inversions(source_list, target_list):
             if tuple(new_list) not in visited:
                 visited.add(tuple(new_list))
                 queue.append((new_list, new_mutation_order, inversion_count + 1))
-    return [], 0
+        #I wanted to split the possibilities so that non_overlapping are executed first and then not looked at anymore
+        #But I ran out of time
 
 def inversion_mutations(file_name, new_file_name):
     """
