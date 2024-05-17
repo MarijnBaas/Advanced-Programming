@@ -170,6 +170,7 @@ def minimal_inversions(source_list, target_list):
     visited.add(tuple(source_list))
 
     while queue:
+        #print("yes")
         #Get the first element in the queue
         current_list, mutation_order, inversion_count = queue.popleft()
         #Check if there is mutations left
@@ -221,4 +222,4 @@ def inversion_mutations(file_name, new_file_name):
             new_file.write('\n')
     new_file.close()
 
-#inversion_mutations('sample_sequence_set2.txt', 'solved_sample_sequence_set2.txt')
+inversion_mutations('test_sequence_set.txt', 'solved_test_set.txt')
