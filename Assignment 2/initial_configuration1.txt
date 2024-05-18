@@ -1,0 +1,21 @@
+5 0 3
+
+3 3 0
+
+3 7 0
+
+5
+
+IIIMT
+
+IIIMM
+
+IIIMT
+
+MMMMM
+
+MTMMT
+
+100
+
+10

@@ -1,0 +1,27 @@
+The plan is to make a list with sublists and store what type of cell is inside the cell so for example a 3 by 3 grid 
+would be [[I, T, M],[I, T, M],[I, T, M]]. The cell types all have a common parent that defines what parameters all cell
+types have so in this case it would be:
+- mobility
+- killing ability
+- growth rate. 
+What these are will be defined in the child which will be the specific cell type. After that the simulation will be 
+run from the left to right and then top to bottom. If there is a cell within the specified cell it will then do an action depending on a random number p generated with the random function. Possible actions are and the formula used
+to calculate the probability depend on the attributes above with mobility (m), killing (k) and growth rate (g):
+- Move      (with probability p =< m/(m+k+g))
+- Kill      (with probability if m/(m+k+g) < p =< (m+k)/(m+k+g))
+- Spawn     (with probability p > (m+k)/(m+k+g))
+- Rest      (happens if the seleceted action is not possible)
+
+What is better to define the within the cell types all the locations where they are or within a list what cell types
+are at which positions?
+
+Do you have to every time make a new grid with the new positions in letters or is it possible to keep it within the 
+cell types?
+
+Should we omit all options that have a 0 already in the beginning?
+
+Cells that are spawned should be added to the queue in the same iteration!!
+
+If it moves it should not be calculated again!!
+
+If it kills it does not move to the square which it kills!!
