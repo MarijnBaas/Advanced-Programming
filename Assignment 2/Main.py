@@ -50,7 +50,24 @@ class cell_type:
             action = 'rest'
         return action
 
-    #def get_move_squares(self, location):
+    def move_squares(self, location, grid_size, grid_buildup):
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        move_squares = []
+        for direction in directions:
+            new_row = location[0] + direction[0]
+            new_col = location[1] + direction[1]
+            if 0 <= new_row < grid_size and 0 <= new_col < grid_size:
+                if grid_buildup[new_row][new_col] == 'O':
+                    move_squares.append([new_row, new_col])
+        if len(move_squares) > 0:
+            choice = random.choice(move_squares) 
+            new_location_row = choice[0]
+            new_location_column = choice[1]
+            #location_row =
+            #location_column ==
+            grid_buildup[new_location_row][new_location_column] = grid_buildup[location[0]][location[1]]
+            grid_buildup[location[0]][location[1]] = 'O'
+        return grid_buildup
 
 
 
@@ -83,11 +100,12 @@ def order_of_operations(grid_size, grid_buildup):
 def simulation(input_file, output_file):
     #Extract all data from input file
     I_Parameters,M_Parameters,T_Parameters,grid_size,grid_buildup,number_of_iterations,seed = read_file(input_file)
+    print(grid_buildup)
     for i in range(1):     #loop over all iterations #number_of_iterations    
         #get all locations with a cell in them
         cell_locations = order_of_operations(grid_size, grid_buildup)
         #generate random number for probability calculations
-        probability = random.random()
+        probability = 0#random.random()
         for cells in range(len(cell_locations)):
             #Check cell location and see what cell type is inside of them
             row = cell_locations[cells][0]
@@ -101,11 +119,9 @@ def simulation(input_file, output_file):
                 cell = MCell(M_Parameters[0], M_Parameters[1], M_Parameters[2], [row, column])
             #See what action the cell will do depending on the probability and cell parameters
             action = cell.generate_action(probability, cell.move, cell.kill, cell.growth)
-            print(action)
+            if action == 'move':
+                grid_buildup = cell.move_squares(cell.location, grid_size, grid_buildup)
+                print(grid_buildup)
             
-
-            
-                
-                
 
 simulation('initial_configuration1.txt','final_configuration.txt')
