@@ -22,8 +22,8 @@ def read_file(input_file):
         grid_line = [*lines[line]]
         grid_line.pop(-1)
         grid_buildup.append(grid_line)
-    number_of_iterations = int(lines[18])
-    seed = int(lines[20])
+    number_of_iterations = int(lines[i*2+10])
+    seed = int(lines[i*2+12])
     return I_Parameters,M_Parameters,T_Parameters,grid_size,grid_buildup,number_of_iterations,seed
     
     
@@ -40,9 +40,9 @@ class cell_type:
 
     def generate_action(self, probability, move, kill, growth):
         action = 0
-        if probability <= move/(move+kill+growth):          #0.5/0.3
+        if probability <= move/(move+kill+growth):          
             action = 'move'
-        elif probability <= (move+kill)/(move+kill+growth): #1/1
+        elif probability <= (move+kill)/(move+kill+growth): 
             action = 'kill'
         elif probability > (move+kill)/(move+kill+growth):
             action = 'growth'
@@ -50,7 +50,7 @@ class cell_type:
             action = 'rest'
         return action
 
-    def move_squares(self, location, grid_size, grid_buildup):
+    def move_cells(self, location, grid_size, grid_buildup):
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
         move_squares = []
         for direction in directions:
@@ -63,12 +63,9 @@ class cell_type:
             choice = random.choice(move_squares) 
             new_location_row = choice[0]
             new_location_column = choice[1]
-            #location_row =
-            #location_column ==
             grid_buildup[new_location_row][new_location_column] = grid_buildup[location[0]][location[1]]
             grid_buildup[location[0]][location[1]] = 'O'
         return grid_buildup
-
 
 
 
@@ -76,13 +73,54 @@ class Infected(cell_type):      #mobility, location, growth
     def __init__(self, move, kill, growth, location):
          super().__init__(move, kill, growth, location)
 
+    def growth_cells(self, location, grid_size, grid_buildup):
+        True
+
 class MCell(cell_type):      #mobility, location, growth
     def __init__(self, move, kill, growth, location):
          super().__init__(move, kill, growth, location)
 
+    def kill_cells(self, location, grid_size, grid_buildup):
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        kill_squares = []
+        can_kill = False
+        for direction in directions:
+            new_row = location[0] + direction[0]
+            new_col = location[1] + direction[1]
+            if 0 <= new_row < grid_size and 0 <= new_col < grid_size:
+                if grid_buildup[new_row][new_col] == 'I':
+                    kill_squares.append([new_row, new_col])
+                elif grid_buildup[new_row][new_col] == 'T':
+                    can_kill = True
+        if len(kill_squares) > 0 and can_kill == True:
+            choice = random.choice(kill_squares) 
+            new_location_row = choice[0]
+            new_location_column = choice[1]
+            grid_buildup[new_location_row][new_location_column] = 'O'
+        return grid_buildup
+
 class TCell(cell_type):      #mobility, location, growth
     def __init__(self, move, kill, growth, location):
          super().__init__(move, kill, growth, location)
+    
+    def kill_cells(self, location, grid_size, grid_buildup):
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        kill_squares = []
+        can_kill = False
+        for direction in directions:
+            new_row = location[0] + direction[0]
+            new_col = location[1] + direction[1]
+            if 0 <= new_row < grid_size and 0 <= new_col < grid_size:
+                if grid_buildup[new_row][new_col] == 'I':
+                    kill_squares.append([new_row, new_col])
+                elif grid_buildup[new_row][new_col] == 'M':
+                    can_kill = True
+        if len(kill_squares) > 0 and can_kill == True:
+            choice = random.choice(kill_squares) 
+            new_location_row = choice[0]
+            new_location_column = choice[1]
+            grid_buildup[new_location_row][new_location_column] = 'O'
+        return grid_buildup
         
 
 
@@ -105,7 +143,7 @@ def simulation(input_file, output_file):
         #get all locations with a cell in them
         cell_locations = order_of_operations(grid_size, grid_buildup)
         #generate random number for probability calculations
-        probability = 0#random.random()
+        probability = 1#random.random()
         for cells in range(len(cell_locations)):
             #Check cell location and see what cell type is inside of them
             row = cell_locations[cells][0]
@@ -120,8 +158,13 @@ def simulation(input_file, output_file):
             #See what action the cell will do depending on the probability and cell parameters
             action = cell.generate_action(probability, cell.move, cell.kill, cell.growth)
             if action == 'move':
-                grid_buildup = cell.move_squares(cell.location, grid_size, grid_buildup)
+                grid_buildup = cell.move_cells(cell.location, grid_size, grid_buildup)
                 print(grid_buildup)
+            elif action == 'kill':
+                grid_buildup = cell.kill_cells(cell.location, grid_size, grid_buildup)
+                print(grid_buildup)
+            elif action == 'growth':
+                cell.growth_cells(cell.location, grid_size, grid_buildup)
             
 
-simulation('initial_configuration1.txt','final_configuration.txt')
+simulation('test_configuration.txt','final_configuration.txt')
