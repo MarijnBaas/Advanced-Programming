@@ -74,7 +74,21 @@ class Infected(cell_type):      #mobility, location, growth
          super().__init__(move, kill, growth, location)
 
     def growth_cells(self, location, grid_size, grid_buildup):
-        True
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        growth_squares = []
+        for direction in directions:
+            new_row = location[0] + direction[0]
+            new_col = location[1] + direction[1]
+            if 0 <= new_row < grid_size and 0 <= new_col < grid_size:
+                if grid_buildup[new_row][new_col] == 'O':
+                    growth_squares.append([new_row, new_col])
+        if len(growth_squares) > 0:
+            choice = random.choice(growth_squares) 
+            new_location_row = choice[0]
+            new_location_column = choice[1]
+            grid_buildup[new_location_row][new_location_column] = grid_buildup[location[0]][location[1]]
+        return grid_buildup         
+
 
 class MCell(cell_type):      #mobility, location, growth
     def __init__(self, move, kill, growth, location):
@@ -139,11 +153,11 @@ def simulation(input_file, output_file):
     #Extract all data from input file
     I_Parameters,M_Parameters,T_Parameters,grid_size,grid_buildup,number_of_iterations,seed = read_file(input_file)
     print(grid_buildup)
-    for i in range(1):     #loop over all iterations #number_of_iterations    
+    for i in range(number_of_iterations):     #loop over all iterations #number_of_iterations    
         #get all locations with a cell in them
         cell_locations = order_of_operations(grid_size, grid_buildup)
         #generate random number for probability calculations
-        probability = 1#random.random()
+        probability = random.random()
         for cells in range(len(cell_locations)):
             #Check cell location and see what cell type is inside of them
             row = cell_locations[cells][0]
@@ -164,7 +178,10 @@ def simulation(input_file, output_file):
                 grid_buildup = cell.kill_cells(cell.location, grid_size, grid_buildup)
                 print(grid_buildup)
             elif action == 'growth':
-                cell.growth_cells(cell.location, grid_size, grid_buildup)
+                grid_buildup = cell.growth_cells(cell.location, grid_size, grid_buildup)
+                print(grid_buildup)
+            elif action == 'rest':
+                print('Should not happen check code for logic errors when determining action')
             
 
-simulation('test_configuration.txt','final_configuration.txt')
+simulation('initial_configuration1.txt','final_configuration.txt')
