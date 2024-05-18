@@ -147,6 +147,12 @@ def order_of_operations(grid_size, grid_buildup):
                 cell_locations.append([rows, columns])
     return cell_locations
 
+def write_output(output_file, grid_buildup):
+    output_file = open(output_file, "w")   
+    for i in range(len(grid_buildup)):
+        grid_line = ' '.join(grid_buildup[i])
+        output_file.write(grid_line)
+        output_file.write('\n' + '\n')
 
 
 def simulation(input_file, output_file):
@@ -182,6 +188,8 @@ def simulation(input_file, output_file):
                 print(grid_buildup)
             elif action == 'rest':
                 print('Should not happen check code for logic errors when determining action')
+    write_output(output_file, grid_buildup)
+
             
 
 simulation('initial_configuration1.txt','final_configuration.txt')
