@@ -28,8 +28,8 @@ def read_file(input_file):
         grid_line = [*lines[line]]
         grid_line.pop(-1)
         grid_buildup.append(grid_line)
-    number_of_iterations = int(lines[grid_size*2+10])
-    seed = int(lines[grid_size*2+12])
+    number_of_iterations = int(lines[i*2+10])
+    seed = int(lines[i*2+12])
     return I_Parameters,M_Parameters,T_Parameters,grid_size,grid_buildup,number_of_iterations,seed
     
     
