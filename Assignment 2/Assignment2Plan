@@ -12,16 +12,9 @@ to calculate the probability depend on the attributes above with mobility (m), k
 - Spawn     (with probability p > (m+k)/(m+k+g))
 - Rest      (happens if the seleceted action is not possible)
 
-What is better to define the within the cell types all the locations where they are or within a list what cell types
-are at which positions?
+Should cells that are spawned be added to the queue in the same iteration?
 
-Do you have to every time make a new grid with the new positions in letters or is it possible to keep it within the 
-cell types?
+Does it move to the square it kills?
 
-Should we omit all options that have a 0 already in the beginning?
-
-Cells that are spawned should be added to the queue in the same iteration!!
-
-If it moves it should not be calculated again!!
-
-If it kills it does not move to the square which it kills!!
+My code has the piece that checks the viability of surrounding squares in 4 different functions however they
+all have slight differences. Is this fine or should I change it to not have that?
