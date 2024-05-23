@@ -1,10 +1,10 @@
-O O T M M
+M T M T O
 
-O M M M O
+M T M O M
 
-T T M O M
+M O M T M
 
-M M M O T
+M M O M O
 
-M O O O M
+O O O M O
 

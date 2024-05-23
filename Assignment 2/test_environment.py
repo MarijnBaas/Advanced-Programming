@@ -198,4 +198,3 @@ def simulation(input_file, output_file):
 
 
 simulation('initial_configuration1.txt','final_configuration.txt')
-
