@@ -108,6 +108,14 @@ def read_file(input_file):
 
 
 
+class cognates:
+    def binding_state(self, molecule_count, total_molecule_count, random, state):
+        if molecule_count/total_molecule_count > random:
+            state = state + 1
+        else:
+            state = 0
+        
+        return state
 
 
 #Classes used for cognate, near cognate, no cognate
@@ -131,32 +139,36 @@ def simulation(input_file, output_file):
     krc = 60
     krnc = 1000
 
-    #calculating probability
+#calculating probability
     classes, amino_molecule_count = determine_class(number_of_amino_acids, codon_dict, trna_dict, amino_list)
     for i in range(number_of_amino_acids):
-        done = False
-        state = 1
-        binding_chance = amino_molecule_count[i]/total_molecule_count
+
+        if classes[i] == 'cognate':
+            amino_acid = cognates()
+        
+        total_passes = 0
         for j in range(int(iteration_count)):
+            state = 1
+            done = False
             while done == False:
+                probability = random.random()
                 if state == 1:
-                    break
-                    #Check binding 
+                    state = amino_acid.binding_state(amino_molecule_count[i], total_molecule_count, probability, state)
                 elif state == 2:
-                    break
-                    #Check state 2->3 transition or end
+                    done = True
+                    total_passes = total_passes + 1
                 elif state == 3:
-                    break
+                    True
                     #Check state 3->2 transition or 3->4 transition
                 elif state == 4:
-                    break
+                    True
                     #check state 4->5 transition or end
                 elif state ==5:
-                    break
+                    True
                     #add 1 to succes rate
-
-
-    #should be done with a while statement and a break if it goes to end or 5th state
+                else:
+                    done = True
+            print(total_passes)
 
 
         
